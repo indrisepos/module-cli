@@ -26,6 +26,16 @@ php bin/magento setup:di:compile
 php bin/magento setup:static-content:deploy
 ```
 
+## Getting Started
+Configure the module: Controller/Adminhtml/Index/Cli.php::__construct()
+```
+$this->configKeepLog = true;
+$this->configSendEmail = true;
+$this->secretFile = 'var/cli_enable_123change123me123.txt';
+```
+## TODO
+system.xml
+
 ## Support
 If you have any issues, please [contact us](mailto:support@magefan.com)
 then if you still need help, open a bug report in GitHub's
