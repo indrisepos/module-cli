@@ -63,6 +63,11 @@ class Cli extends \Magento\Backend\App\Action
     protected $configSendEmail;
 
     /**
+     * @var string
+     */
+    protected $secretFile;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context                $context
@@ -88,8 +93,11 @@ class Cli extends \Magento\Backend\App\Action
         $this->file = $file;
         $this->authSession = $authSession;
         $this->scopeConfig = $scopeConfig;
+
         $this->configKeepLog = true;
         $this->configSendEmail = true;
+        $this->secretFile = 'var/cli_enable_123change123me123.txt';
+
         parent::__construct($context);
     }
 
@@ -102,6 +110,10 @@ class Cli extends \Magento\Backend\App\Action
     {
         try {
             $this->validateUser();
+
+            if(!file_exists($this->secretFile)){
+                throw new \Exception(__('Error: The module is disabled.'), 1);
+            }
 
             $command = $this->getRequest()->getParam('command');
 
