@@ -68,6 +68,16 @@ class Cli extends \Magento\Backend\App\Action
     protected $secretFile;
 
     /**
+     * @var string
+     */
+    protected $configCmdPrefix;
+
+    /**
+     * @var string
+     */
+    protected $configCmdPostfix;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context                $context
@@ -96,7 +106,9 @@ class Cli extends \Magento\Backend\App\Action
 
         $this->configKeepLog = true;
         $this->configSendEmail = true;
-        $this->secretFile = 'var/cli_enable_123change123me123.txt';
+        $this->configCmdPrefix = "/usr/bin/nice -n 19 /bin/bash -c '" ;
+        $this->configCmdPostfix = "'";
+        $this->secretFile = 'var/import-export-tmp-1kjnh23h987asd.txt';
 
         parent::__construct($context);
     }
@@ -129,8 +141,8 @@ class Cli extends \Magento\Backend\App\Action
             }
 
             $this->logFile($command);
-            exec($c = 'cd ' . $this->dir->getRoot() . ' && ' . $command . ' > ' . $this->logFileResult, $a, $b);
-            $message = file_get_contents($this->logFileResult);
+            exec($c = 'cd ' . $this->dir->getRoot() . ' && ' . $this->configCmdPrefix . $command . $this->configCmdPostfix . ' > ' . $this->logFileResult, $a, $b);
+            $message = @file_get_contents($this->logFileResult);
             if (!$message) {
                 $message = __('Command not found or error occurred.' . PHP_EOL);
             }else{
